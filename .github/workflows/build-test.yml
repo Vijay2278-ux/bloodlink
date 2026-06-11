@@ -1,0 +1,49 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run linter
+      run: npm run lint
+      continue-on-error: true
+
+    - name: Build application
+      run: npm run build
+      env:
+        JWT_SECRET: ${{ secrets.JWT_SECRET || 'test-secret-key-do-not-use-in-production' }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgresql://user:password@localhost:5432/test_db' }}
+
+    - name: Type check
+      run: npx tsc --noEmit
+      continue-on-error: true
+
+    - name: Upload build artifacts
+      if: success()
+      uses: actions/upload-artifact@v3
+      with:
+        name: next-build-${{ matrix.node-version }}
+        path: .next
+        retention-days: 5
