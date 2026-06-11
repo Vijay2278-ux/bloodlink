@@ -14,9 +14,14 @@ export async function POST(req: Request) {
     const { email, password } = loginSchema.parse(body)
     const normalizedEmail = email.trim().toLowerCase()
 
-    // Find user
-    const user = await prisma.user.findUnique({
-      where: { email: normalizedEmail },
+    // Find user case-insensitively so existing accounts still login
+    const user = await prisma.user.findFirst({
+      where: {
+        email: {
+          equals: normalizedEmail,
+          mode: "insensitive",
+        },
+      },
     })
 
     if (!user) {
