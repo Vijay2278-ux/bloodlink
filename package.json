@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "postinstall": "prisma generate",
+    "prebuild": "prisma generate",
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
