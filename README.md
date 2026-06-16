@@ -1,30 +1,54 @@
-# Educational app
+# Edu Static Web
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+A modern educational platform built with Next.js, TypeScript, Prisma, and PostgreSQL.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/meenas-projects-c458dc2b/v0-remix-of-educational-app)
-(https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/z8BdICCNpEj)
+## Features
 
-## Overview
+* Secure authentication with JWT
+* Student profile management
+* Personalized learning dashboard
+* Subject-based learning modules
+* Quiz and progress tracking
+* Multilingual support
+* Responsive and accessible UI
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+## Tech Stack
+
+* Next.js
+* TypeScript
+* Tailwind CSS
+* Prisma ORM
+* PostgreSQL
+* JWT Authentication
+
+## Getting Started
+
+```bash
+npm install
+npm run dev
+```
+
+Apply database migrations:
+
+```bash
+npx prisma generate
+npx prisma db push
+```
+
+## Project Structure
+
+```text
+app/
+components/
+lib/
+prisma/
+public/
+```
 
 ## Deployment
 
-Your project is live at:
+The application is optimized for deployment on Vercel.
 
-**[https://vercel.com/meenas-projects-c458dc2b/v0-remix-of-educational-app](https://vercel.com/meenas-projects-c458dc2b/v0-remix-of-educational-app)**
+## License
 
-## Build your app
-
-Continue building your app on:
-
-**[https://v0.app/chat/projects/z8BdICCNpEj](https://v0.app/chat/projects/z8BdICCNpEj)**
-
-## How It Works
-
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+MIT
