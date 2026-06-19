@@ -212,7 +212,7 @@ export default function DashboardPage() {
                         <div>
                           <p className="font-medium text-slate-900">{donor.user?.name || "Anonymous"}</p>
                           <p className="text-sm text-muted-foreground">
-                            {donor.city} &middot; {donor.bloodGroup}
+                            {donor.city} &middot; {donor.bloodGroup} &middot; {donor.phone}
                           </p>
                         </div>
                       </div>
