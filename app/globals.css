@@ -4,39 +4,39 @@
 /* Dark mode uses the `.dark` class; enable via Tailwind `darkMode: 'class'` in config */
 
 :root {
-  --background: #f8fafc;
-  --foreground: #16324f;
-  --card: rgba(255, 255, 255, 0.78);
-  --card-foreground: #16324f;
+  --background: #fef2f2;
+  --foreground: #1f2937;
+  --card: rgba(255, 255, 255, 0.85);
+  --card-foreground: #1f2937;
   --popover: #ffffff;
-  --popover-foreground: #16324f;
-  --primary: #1d4ed8;
-  --primary-foreground: #eff6ff;
-  --secondary: #f59e0b;
-  --secondary-foreground: #3b2200;
-  --muted: #eaf1fb;
-  --muted-foreground: #526277;
-  --accent: #dbeafe;
-  --accent-foreground: #1e3a8a;
-  --destructive: #dc2626;
+  --popover-foreground: #1f2937;
+  --primary: #dc2626;
+  --primary-foreground: #fef2f2;
+  --secondary: #991b1b;
+  --secondary-foreground: #fef2f2;
+  --muted: #fee2e2;
+  --muted-foreground: #6b7280;
+  --accent: #fecaca;
+  --accent-foreground: #991b1b;
+  --destructive: #b91c1c;
   --destructive-foreground: #ffffff;
-  --border: rgba(125, 159, 206, 0.24);
-  --input: rgba(255, 255, 255, 0.82);
-  --ring: rgba(29, 78, 216, 0.32);
-  --chart-1: #1d4ed8;
-  --chart-2: #0f766e;
+  --border: rgba(220, 38, 38, 0.15);
+  --input: rgba(255, 255, 255, 0.9);
+  --ring: rgba(220, 38, 38, 0.3);
+  --chart-1: #dc2626;
+  --chart-2: #16a34a;
   --chart-3: #f59e0b;
   --chart-4: #7c3aed;
-  --chart-5: #dc2626;
+  --chart-5: #b91c1c;
   --radius: 0.75rem;
   --sidebar: rgba(255, 255, 255, 0.88);
-  --sidebar-foreground: #16324f;
-  --sidebar-primary: #1d4ed8;
-  --sidebar-primary-foreground: #eff6ff;
-  --sidebar-accent: #dbeafe;
-  --sidebar-accent-foreground: #1e3a8a;
-  --sidebar-border: rgba(125, 159, 206, 0.24);
-  --sidebar-ring: rgba(29, 78, 216, 0.32);
+  --sidebar-foreground: #1f2937;
+  --sidebar-primary: #dc2626;
+  --sidebar-primary-foreground: #fef2f2;
+  --sidebar-accent: #fecaca;
+  --sidebar-accent-foreground: #991b1b;
+  --sidebar-border: rgba(220, 38, 38, 0.15);
+  --sidebar-ring: rgba(220, 38, 38, 0.3);
 
   /* Theme mappings */
   --font-sans: var(--font-geist-sans);
@@ -80,38 +80,38 @@
 }
 
 .dark {
-  --background: #081120;
-  --foreground: #edf4ff;
-  --card: rgba(10, 24, 45, 0.86);
-  --card-foreground: #edf4ff;
-  --popover: #0f1c32;
-  --popover-foreground: #edf4ff;
-  --primary: #60a5fa;
-  --primary-foreground: #081120;
-  --secondary: #fbbf24;
-  --secondary-foreground: #271800;
-  --muted: #16253d;
-  --muted-foreground: #9fb3cc;
-  --accent: #183153;
-  --accent-foreground: #cddfff;
-  --destructive: #f87171;
+  --background: #1a0a0a;
+  --foreground: #fef2f2;
+  --card: rgba(30, 15, 15, 0.86);
+  --card-foreground: #fef2f2;
+  --popover: #2a1212;
+  --popover-foreground: #fef2f2;
+  --primary: #ef4444;
+  --primary-foreground: #1a0a0a;
+  --secondary: #fca5a5;
+  --secondary-foreground: #1a0a0a;
+  --muted: #2d1515;
+  --muted-foreground: #9ca3af;
+  --accent: #3b1a1a;
+  --accent-foreground: #fecaca;
+  --destructive: #ef4444;
   --destructive-foreground: #ffffff;
-  --border: rgba(120, 156, 214, 0.24);
-  --input: rgba(16, 30, 53, 0.88);
-  --ring: rgba(96, 165, 250, 0.38);
-  --chart-1: #60a5fa;
+  --border: rgba(239, 68, 68, 0.2);
+  --input: rgba(30, 15, 15, 0.88);
+  --ring: rgba(239, 68, 68, 0.4);
+  --chart-1: #ef4444;
   --chart-2: #22c55e;
   --chart-3: #fbbf24;
   --chart-4: #a78bfa;
   --chart-5: #f87171;
-  --sidebar: rgba(10, 24, 45, 0.92);
-  --sidebar-foreground: #edf4ff;
-  --sidebar-primary: #60a5fa;
-  --sidebar-primary-foreground: #081120;
-  --sidebar-accent: #183153;
-  --sidebar-accent-foreground: #cddfff;
-  --sidebar-border: rgba(120, 156, 214, 0.24);
-  --sidebar-ring: rgba(96, 165, 250, 0.38);
+  --sidebar: rgba(30, 15, 15, 0.92);
+  --sidebar-foreground: #fef2f2;
+  --sidebar-primary: #ef4444;
+  --sidebar-primary-foreground: #1a0a0a;
+  --sidebar-accent: #3b1a1a;
+  --sidebar-accent-foreground: #fecaca;
+  --sidebar-border: rgba(239, 68, 68, 0.2);
+  --sidebar-ring: rgba(239, 68, 68, 0.4);
 
   /* Theme mappings */
   --font-sans: var(--font-geist-sans);
@@ -178,7 +178,7 @@
     background-attachment: fixed;
     transition:
       background-color 200ms ease,
-      background-image 200ms ease,
+      opacity 200ms ease,
       color 200ms ease;
   }
 
@@ -188,15 +188,56 @@
   }
 }
 
-/* Added custom animations for educational elements */
+/* Custom animations */
 @keyframes bounce-gentle {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out both;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.3s ease-out both;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+
+.card-hover {
+  transition: all 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(220, 38, 38, 0.1);
+}
+
+.btn-pulse {
+  animation: pulse-glow 2s ease-in-out infinite;
 }
 
 @keyframes pulse-glow {

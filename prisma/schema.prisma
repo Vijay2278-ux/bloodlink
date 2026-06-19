@@ -11,37 +11,48 @@ datasource db {
 }
 
 model User {
-  id        String     @id @default(cuid())
-  email     String     @unique
-  name      String?
-  password  String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  
-  // Track user progress
-  subjects  UserSubject[]
-  quizzes   UserQuiz[]
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  password      String
+  role          Role      @default(USER)
+  donorProfile  Donor?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
 
-model UserSubject {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  subject   String
-  progress  Float    @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([userId, subject])
+enum Role {
+  USER
+  ADMIN
 }
 
-model UserQuiz {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  quizId    String
-  score     Float
-  completed Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Donor {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id])
+  bloodGroup      String
+  age             Int
+  phone           String
+  city            String
+  lastDonation    DateTime?
+  isAvailable     Boolean  @default(true)
+  createdAt       DateTime @default(now())
+}
+
+model EmergencyRequest {
+  id            String   @id @default(cuid())
+  requesterName String
+  bloodGroup    String
+  hospitalName  String
+  location      String
+  contactNumber String
+  urgencyLevel  Urgency  @default(NORMAL)
+  status        String   @default("ACTIVE") // ACTIVE, FULFILLED, CANCELLED
+  createdAt     DateTime @default(now())
+}
+
+enum Urgency {
+  NORMAL
+  URGENT
+  CRITICAL
 }

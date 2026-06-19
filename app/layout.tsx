@@ -1,5 +1,4 @@
-import './globals.css'
-import React, { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import type { Metadata } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
@@ -7,18 +6,18 @@ import { Analytics } from '@vercel/analytics/react'
 import { LanguageProvider } from '@/lib/language-context'
 import { ThemeProvider } from '@/components/theme-provider'
 import { AuthProvider } from '@/lib/auth-context'
-import { Toaster } from 'sonner'
+
 
 export const metadata: Metadata = {
   title: 'BloodLink - Blood Donor Finder',
   description: 'Find blood donors quickly during emergencies',
-  generator: 'v0.app',
+  generator: 'with love',
 }
 
 export default function RootLayout({
   children,
 }: {
-  children: ReactNode
+  children: ReactNode // Use the imported ReactNode type
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -27,14 +26,6 @@ export default function RootLayout({
           <AuthProvider>
             <LanguageProvider>
               {children}
-              <Toaster
-                position="top-right"
-                toastOptions={{
-                  style: {
-                    border: '1px solid rgba(220, 38, 38, 0.15)',
-                  },
-                }}
-              />
               <Analytics />
             </LanguageProvider>
           </AuthProvider>
