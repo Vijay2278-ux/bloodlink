@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { useState } from "react"
+import { useRouter, usePathname } from "next/navigation"
 import { Droplet, Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/lib/auth-context"
@@ -9,6 +10,24 @@ import { useAuth } from "@/lib/auth-context"
 export function BloodLinkNavbar() {
   const { isAuthenticated, user, logout } = useAuth()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const router = useRouter()
+  const pathname = usePathname()
+
+  const handleNavClick = (e: React.MouseEvent, href: string) => {
+    if (href.startsWith("/#")) {
+      e.preventDefault()
+      const id = href.slice(2)
+      if (pathname !== "/") {
+        router.push("/")
+        setTimeout(() => {
+          document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" })
+        }, 300)
+      } else {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" })
+      }
+      setMobileOpen(false)
+    }
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-red-100 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
@@ -23,10 +42,10 @@ export function BloodLinkNavbar() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">
-          <NavLink href="/" label="Home" />
-          <NavLink href="/#emergency" label="Emergency Requests" />
-          <NavLink href="/#donate" label="Donate Blood" />
-          {isAuthenticated && <NavLink href="/dashboard" label="Dashboard" />}
+          <NavLink href="/" label="Home" onClick={handleNavClick} />
+          <NavLink href="/#emergency" label="Emergency Requests" onClick={handleNavClick} />
+          <NavLink href="/#donate" label="Donate Blood" onClick={handleNavClick} />
+          {isAuthenticated && <NavLink href="/dashboard" label="Dashboard" onClick={handleNavClick} />}
         </nav>
 
         <div className="hidden md:flex items-center gap-2">
@@ -67,11 +86,11 @@ export function BloodLinkNavbar() {
       {mobileOpen && (
         <div className="md:hidden border-t border-red-100 bg-white px-4 pb-4 pt-2 animate-in slide-in-from-top-2">
           <nav className="flex flex-col gap-1">
-            <MobileNavLink href="/" label="Home" onClick={() => setMobileOpen(false)} />
-            <MobileNavLink href="/#emergency" label="Emergency Requests" onClick={() => setMobileOpen(false)} />
-            <MobileNavLink href="/#donate" label="Donate Blood" onClick={() => setMobileOpen(false)} />
+            <MobileNavLink href="/" label="Home" onClick={(e) => handleNavClick(e, "/")} />
+            <MobileNavLink href="/#emergency" label="Emergency Requests" onClick={(e) => handleNavClick(e, "/#emergency")} />
+            <MobileNavLink href="/#donate" label="Donate Blood" onClick={(e) => handleNavClick(e, "/#donate")} />
             {isAuthenticated && (
-              <MobileNavLink href="/dashboard" label="Dashboard" onClick={() => setMobileOpen(false)} />
+              <MobileNavLink href="/dashboard" label="Dashboard" onClick={(e) => handleNavClick(e, "/dashboard")} />
             )}
             <div className="mt-2 pt-2 border-t border-red-100">
               {isAuthenticated ? (
@@ -100,10 +119,11 @@ export function BloodLinkNavbar() {
   )
 }
 
-function NavLink({ href, label }: { href: string; label: string }) {
+function NavLink({ href, label, onClick }: { href: string; label: string; onClick?: (e: React.MouseEvent, href: string) => void }) {
   return (
     <Link
       href={href}
+      onClick={(e) => onClick?.(e, href)}
       className="px-3 py-2 text-sm font-medium text-muted-foreground rounded-md hover:bg-red-50 hover:text-red-700 transition-colors"
     >
       {label}
@@ -111,11 +131,11 @@ function NavLink({ href, label }: { href: string; label: string }) {
   )
 }
 
-function MobileNavLink({ href, label, onClick }: { href: string; label: string; onClick: () => void }) {
+function MobileNavLink({ href, label, onClick }: { href: string; label: string; onClick?: (e: React.MouseEvent, href: string) => void }) {
   return (
     <Link
       href={href}
-      onClick={onClick}
+      onClick={(e) => onClick?.(e, href)}
       className="px-3 py-2.5 text-sm font-medium text-muted-foreground rounded-md hover:bg-red-50 hover:text-red-700 transition-colors"
     >
       {label}
