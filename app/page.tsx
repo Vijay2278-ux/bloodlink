@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { toast } from "sonner"
+import { useAuth } from "@/lib/auth-context"
 import {
   Droplet, Heart, Phone, MapPin, Hospital, Clock, Users,
   AlertCircle, CheckCircle, ArrowRight, Search, ChevronRight, Loader2
@@ -35,6 +36,7 @@ interface EmergencyRequest {
 }
 
 export default function EmergencyPage() {
+  const { user, isAuthenticated } = useAuth()
   const [mounted, setMounted] = useState(false)
   const [requests, setRequests] = useState<EmergencyRequest[]>([])
   const [loading, setLoading] = useState(true)
@@ -42,6 +44,13 @@ export default function EmergencyPage() {
   const [formData, setFormData] = useState({
     requesterName: "", bloodGroup: "", hospitalName: "", location: "", contactNumber: "", urgency: "NORMAL"
   })
+  const [donorForm, setDonorForm] = useState({
+    bloodGroup: "", age: "", phone: "", city: "", lastDonation: "", isAvailable: true,
+  })
+  const [donorSubmitting, setDonorSubmitting] = useState(false)
+  const [donorError, setDonorError] = useState("")
+  const [donorSuccess, setDonorSuccess] = useState(false)
+  const [isDonor, setIsDonor] = useState(false)
 
   useEffect(() => { setMounted(true) }, [])
 
@@ -89,6 +98,74 @@ export default function EmergencyPage() {
       toast.error("Failed to submit request. Please try again.")
     } finally {
       setSubmitting(false)
+    }
+  }
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetch("/api/donors", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("auth_token")}` },
+      })
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.donors?.some((d: any) => d.userId === user?.id)) {
+            setIsDonor(true)
+          }
+        })
+        .catch(() => {})
+    }
+  }, [isAuthenticated, user])
+
+  const handleDonorSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setDonorError("")
+    setDonorSuccess(false)
+
+    if (!donorForm.bloodGroup || !donorForm.age || !donorForm.phone || !donorForm.city) {
+      setDonorError("Please fill in all required fields.")
+      return
+    }
+
+    const ageNum = parseInt(donorForm.age)
+    if (isNaN(ageNum) || ageNum < 1 || ageNum > 150) {
+      setDonorError("Please enter a valid age.")
+      return
+    }
+
+    setDonorSubmitting(true)
+    try {
+      const token = localStorage.getItem("auth_token")
+      const res = await fetch("/api/donors", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          bloodGroup: donorForm.bloodGroup,
+          age: ageNum,
+          phone: donorForm.phone,
+          city: donorForm.city,
+          lastDonation: donorForm.lastDonation || undefined,
+          isAvailable: donorForm.isAvailable,
+        }),
+      })
+
+      const data = await res.json()
+      if (!res.ok) {
+        const msg = Array.isArray(data.error) ? data.error[0]?.message : data.error
+        setDonorError(msg || "Failed to register as donor")
+        return
+      }
+
+      setDonorSuccess(true)
+      setIsDonor(true)
+      setDonorForm({ bloodGroup: "", age: "", phone: "", city: "", lastDonation: "", isAvailable: true })
+      toast.success("You're now registered as a blood donor!", { duration: 5000 })
+    } catch {
+      setDonorError("Failed to submit. Please try again.")
+    } finally {
+      setDonorSubmitting(false)
     }
   }
 
@@ -342,32 +419,132 @@ export default function EmergencyPage() {
           </div>
         </section>
 
-        {/* How It Works */}
+        {/* Donor Registration */}
         <section className="mb-16" id="donate">
           <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-slate-900 mb-3">How It Works</h2>
+            <h2 className="text-3xl font-bold text-slate-900 mb-3">Register as a Blood Donor</h2>
             <p className="text-muted-foreground max-w-lg mx-auto">
-              Three simple steps to save a life through blood donation
+              Sign up to be notified when someone in your area needs your blood type
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { icon: Search, step: "01", title: "Find a Request", desc: "Browse emergency blood requests in your area or nearby hospitals." },
-              { icon: CheckCircle, step: "02", title: "Respond & Confirm", desc: "Contact the requester or hospital to confirm your donation appointment." },
-              { icon: Droplet, step: "03", title: "Donate & Save", desc: "Visit the hospital, donate blood, and help save a life in your community." },
-            ].map((item, i) => (
-              <Card key={item.step} className={`border-0 shadow-md text-center card-hover animate-fade-in-up stagger-${i + 1}`}>
-                <CardContent className="p-8">
-                  <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-red-100 flex items-center justify-center transition-transform hover:scale-110">
-                    <item.icon className="h-7 w-7 text-red-600" />
+
+          {!isAuthenticated ? (
+            <Card className="max-w-lg mx-auto border-dashed border-2 border-red-200 bg-red-50/50">
+              <CardContent className="p-10 text-center">
+                <Heart className="h-12 w-12 mx-auto mb-3 text-red-400" />
+                <h3 className="text-lg font-semibold text-slate-900 mb-2">Sign in Required</h3>
+                <p className="text-sm text-muted-foreground mb-6">
+                  Please sign in or create an account to register as a blood donor.
+                </p>
+                <Button asChild className="bg-red-600 hover:bg-red-700">
+                  <Link href="/login?tab=register">Create Account</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          ) : isDonor ? (
+            <Card className="max-w-lg mx-auto border-green-200 bg-green-50/50">
+              <CardContent className="p-10 text-center">
+                <CheckCircle className="h-12 w-12 mx-auto mb-3 text-green-500" />
+                <h3 className="text-lg font-semibold text-slate-900 mb-2">You're Already Registered!</h3>
+                <p className="text-sm text-muted-foreground">
+                  Thank you for being a blood donor. Check your dashboard for emergency requests.
+                </p>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card className="max-w-lg mx-auto border-red-200 shadow-md">
+              <CardContent className="p-6">
+                {donorError && (
+                  <div className="flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-700 mb-4">
+                    <AlertCircle className="h-4 w-4 flex-shrink-0" />
+                    <span>{donorError}</span>
                   </div>
-                  <div className="text-xs font-bold text-red-400 mb-1">{item.step}</div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground">{item.desc}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                )}
+                {donorSuccess && (
+                  <div className="flex items-center gap-2 rounded-lg bg-green-50 p-3 text-sm text-green-700 mb-4">
+                    <CheckCircle className="h-4 w-4 flex-shrink-0" />
+                    <span>Successfully registered as a donor!</span>
+                  </div>
+                )}
+                <form onSubmit={handleDonorSubmit} className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-700">Blood Group *</label>
+                    <select
+                      value={donorForm.bloodGroup}
+                      onChange={(e) => setDonorForm({ ...donorForm, bloodGroup: e.target.value })}
+                      className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:border-ring"
+                      required
+                    >
+                      <option value="" disabled>Select blood group</option>
+                      {bloodGroups.map((g) => (
+                        <option key={g} value={g}>{g}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-slate-700">Age *</label>
+                      <Input
+                        type="number"
+                        placeholder="e.g. 25"
+                        value={donorForm.age}
+                        onChange={(e) => setDonorForm({ ...donorForm, age: e.target.value })}
+                        required
+                        min={1}
+                        max={150}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-slate-700">Phone *</label>
+                      <Input
+                        type="tel"
+                        placeholder="Phone number"
+                        value={donorForm.phone}
+                        onChange={(e) => setDonorForm({ ...donorForm, phone: e.target.value })}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-700">City *</label>
+                    <Input
+                      placeholder="e.g. Mumbai"
+                      value={donorForm.city}
+                      onChange={(e) => setDonorForm({ ...donorForm, city: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-700">Last Donation Date (optional)</label>
+                    <Input
+                      type="date"
+                      value={donorForm.lastDonation}
+                      onChange={(e) => setDonorForm({ ...donorForm, lastDonation: e.target.value })}
+                    />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="isAvailable"
+                      checked={donorForm.isAvailable}
+                      onChange={(e) => setDonorForm({ ...donorForm, isAvailable: e.target.checked })}
+                      className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                    />
+                    <label htmlFor="isAvailable" className="text-sm text-slate-700">
+                      Available for donation
+                    </label>
+                  </div>
+                  <Button type="submit" className="w-full bg-red-600 hover:bg-red-700 h-11 text-base" disabled={donorSubmitting}>
+                    {donorSubmitting ? (
+                      <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Registering...</>
+                    ) : (
+                      "Register as Donor"
+                    )}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          )}
         </section>
 
         {/* CTA */}

@@ -6,7 +6,7 @@ import { Analytics } from '@vercel/analytics/react'
 import { LanguageProvider } from '@/lib/language-context'
 import { ThemeProvider } from '@/components/theme-provider'
 import { AuthProvider } from '@/lib/auth-context'
-
+import './globals.css'
 
 export const metadata: Metadata = {
   title: 'BloodLink - Blood Donor Finder',

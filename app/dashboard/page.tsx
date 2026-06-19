@@ -28,6 +28,8 @@ export default function DashboardPage() {
   const [mounted, setMounted] = useState(false)
   const [requests, setRequests] = useState<EmergencyRequest[]>([])
   const [fetching, setFetching] = useState(true)
+  const [donors, setDonors] = useState<any[]>([])
+  const [donorsLoading, setDonorsLoading] = useState(true)
 
   useEffect(() => { setMounted(true) }, [])
 
@@ -44,6 +46,11 @@ export default function DashboardPage() {
         .then((data) => { if (data.requests) setRequests(data.requests) })
         .catch(() => {})
         .finally(() => setFetching(false))
+      fetch("/api/donors")
+        .then((res) => res.json())
+        .then((data) => { if (data.donors) setDonors(data.donors) })
+        .catch(() => {})
+        .finally(() => setDonorsLoading(false))
     }
   }, [isAuthenticated])
 
@@ -175,6 +182,53 @@ export default function DashboardPage() {
             <Link href="/#emergency">Create Emergency Request</Link>
           </Button>
         </div>
+
+        {/* Registered Donors */}
+        <Card className="border-red-200 shadow-sm mt-8">
+          <CardHeader className="border-b border-red-100">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Users className="h-5 w-5 text-red-600" />
+              Registered Donors
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            {donorsLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <Loader2 className="h-6 w-6 animate-spin text-red-600" />
+              </div>
+            ) : donors.length === 0 ? (
+              <div className="p-8 text-center text-muted-foreground">
+                No donors registered yet.
+              </div>
+            ) : (
+              <div className="divide-y divide-red-50">
+                {donors.map((donor: any) => (
+                  <div key={donor.id} className="p-4 hover:bg-red-50/50 transition-colors">
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
+                          <Droplet className="h-5 w-5 text-red-600" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-slate-900">{donor.user?.name || "Anonymous"}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {donor.city} &middot; {donor.bloodGroup}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${donor.isAvailable ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"}`}>
+                          {donor.isAvailable ? "Available" : "Unavailable"}
+                        </span>
+                        <span className="text-muted-foreground">Age: {donor.age}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </main>
     </div>
   )
