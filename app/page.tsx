@@ -137,7 +137,7 @@ export default function EmergencyPage() {
       await fetchRequests()
       toast.success("Emergency request submitted! We'll notify matching donors.", { duration: 5000 })
     } catch (err) {
-      toast.error("Failed to submit request. Please try again.")
+      toast.error("Failed to submit  request. Please try again.")
     } finally {
       setSubmitting(false)
     }
