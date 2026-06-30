@@ -33,14 +33,7 @@ export function GamesView({ subject, onBack }: GamesViewProps) {
 
     if (subject.id === "math") {
       baseGames.push(
-        {
-          id: "math-calculator",
-          title: "Quick Math Challenge",
-          description: "Solve arithmetic problems as fast as you can!",
-          type: "quiz",
-          difficulty: "medium",
-          subjectId: "math",
-        },
+     
       )
     } else if (subject.id === "science") {
       baseGames.push(
