@@ -1,10 +1,4 @@
-export interface Subject {
-  id: string
-  name: string
-  icon: string
-  color: string
-  description: string
-}
+export interface Subject 
 
 export interface Topic {
   id: string
