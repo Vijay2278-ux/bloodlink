@@ -11,6 +11,12 @@ A modern educational platform built with Next.js, TypeScript, Prisma, and Postgr
 * Quiz and progress tracking
 * Multilingual support
 * Responsive and accessible UI
+##images
+<img width="2341" height="1427" alt="Screenshot 2026-06-30 162628" src="https://github.com/user-attachments/assets/657fc872-eade-4af0-b3d3-b26752748d08" />
+<img width="2341" height="1436" alt="Screenshot 2026-06-30 162701" src="https://github.com/user-attachments/assets/090040c7-edf9-4683-b169-3e8e7f3e89c2" />
+
+
+
 
 ## Tech Stack
 
