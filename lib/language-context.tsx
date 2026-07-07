@@ -30,12 +30,12 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     setLanguageState(lang)
     localStorage.setItem("preferredLanguage", lang)
   }
-
   const t = (key: keyof typeof TRANSLATIONS.en, vars?: Record<string, string | number>): string => {
     const base = TRANSLATIONS[language][key as keyof (typeof TRANSLATIONS)[LanguageCode]] || TRANSLATIONS.en[key]
     if (!vars) return base
     return Object.keys(vars).reduce((s, varName) => s.replace(new RegExp(`{${varName}}`, "g"), String(vars[varName])), base)
   }
+  
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage, t }}>
