@@ -42,10 +42,20 @@ jobs:
       run: pnpm exec tsc --noEmit
       continue-on-error: true
 
-    - name: Upload build artifacts
-      if: success()
-      uses: actions/upload-artifact@v4
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
       with:
-        name: next-build-${{ matrix.node-version }}
-        path: .next
-        retention-days: 5
+        node-version: ${{ matrix.node-version }}
+        cache: "pnpm"
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+          version: 9
+
+    - name: Install dependencies
+      run: |
+         corepack enable
+         pnpm install --frozen-lockfile
