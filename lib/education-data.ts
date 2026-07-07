@@ -47,13 +47,7 @@ export const SUBJECTS_BY_CLASS: Record<string, Subject[]> = {
     },
   ],
   "9-12": [
-    {
-      id: "math",
-      name: "Mathematics",
-      icon: "🔢",
-      color: "bg-blue-500",
-      description: "Advanced algebra, calculus, and geometry",
-    },
+  
     {
       id: "physics",
       name: "Physics",
