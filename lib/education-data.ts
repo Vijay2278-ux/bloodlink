@@ -8,7 +8,6 @@ export interface Topic {
   subjectId: string
   classLevel: number
 }
-
 export interface Question {
   id: string
   question: string
@@ -18,6 +17,7 @@ export interface Question {
   topicId: string
   difficulty: "easy" | "medium" | "hard"
 }
+
 
 export interface Game 
  
