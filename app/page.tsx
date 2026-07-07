@@ -13,7 +13,13 @@ import {
   Droplet, Heart, Phone, MapPin, Hospital, Clock, Users,
   AlertCircle, CheckCircle, ArrowRight, Search, ChevronRight, Loader2, Sparkles
 } from "lucide-react"
-
+export interface UserProfile {
+  name: string
+  age: number
+  classLevel: number
+  reason: string
+  completedOnboarding: boolean
+}
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]
 
 const bloodCompatibility: Record<string, { canDonateTo: string[]; canReceive: string[] }> = {

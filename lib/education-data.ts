@@ -1,4 +1,10 @@
-export interface Subject 
+export interface Subject {
+  id: string
+  name: string
+  icon: string
+  color: string
+  description: string
+}
 
 export interface Topic {
   id: string
@@ -18,9 +24,14 @@ export interface Question {
   difficulty: "easy" | "medium" | "hard"
 }
 
-
-export interface Game 
- 
+export interface Game {
+  id: string
+  title: string
+  description: string
+  type: "puzzle" | "memory" | "quiz" | "word"
+  difficulty: "easy" | "medium" | "hard"
+  subjectId?: string
+}
 
 export const SUBJECTS_BY_CLASS: Record<string, Subject[]> = {
   "6-8": [
