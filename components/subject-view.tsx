@@ -120,11 +120,7 @@ export function SubjectView({ subject, userProfile, onBack }: SubjectViewProps) 
                       <div className="text-sm text-muted-foreground mb-4 line-clamp-3">{topic.notes}</div>
                       <Button size="sm" className="w-full group-hover:animate-pulse-glow">
                         Read Notes
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+         
             ) : (
               <Card className="text-center p-12">
                 <CardContent>
