@@ -66,10 +66,7 @@ export function SubjectView({ subject, userProfile, onBack }: SubjectViewProps) 
             onClick={() => setViewMode("topics")}
             className="flex items-center gap-2"
           >
-            <BookOpen className="h-4 w-4" />
-            {t("topicsNotes")}
-          </Button>
-          <Button
+        
             variant={viewMode === "quiz" ? "default" : "outline"}
             onClick={() => setViewMode("quiz")}
             className="flex items-center gap-2"
