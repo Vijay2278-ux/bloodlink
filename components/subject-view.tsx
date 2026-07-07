@@ -24,6 +24,7 @@ type ViewMode = "topics" | "quiz" | "games"
 export function SubjectView({ subject, userProfile, onBack }: SubjectViewProps) {
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null)
   const [viewMode, setViewMode] = useState<ViewMode>("topics")
+  const currentViewMode = viewMode
 
   const { t } = useLanguage()
 
@@ -66,8 +67,11 @@ export function SubjectView({ subject, userProfile, onBack }: SubjectViewProps) 
             onClick={() => setViewMode("topics")}
             className="flex items-center gap-2"
           >
-        
-            variant={viewMode === "quiz" ? "default" : "outline"}
+            <BookOpen className="h-4 w-4" />
+            {t("topicsNotes")}
+          </Button>
+          <Button
+            variant={currentViewMode === "quiz" ? "default" : "outline"}
             onClick={() => setViewMode("quiz")}
             className="flex items-center gap-2"
           >
@@ -75,7 +79,7 @@ export function SubjectView({ subject, userProfile, onBack }: SubjectViewProps) 
             {t("seeWhatYouveLearnt")}
           </Button>
           <Button
-            variant={viewMode === "games" ? "default" : "outline"}
+            variant={currentViewMode === "games" ? "default" : "outline"}
             onClick={() => setViewMode("games")}
             className="flex items-center gap-2"
           >
@@ -116,15 +120,20 @@ export function SubjectView({ subject, userProfile, onBack }: SubjectViewProps) 
                     <CardContent>
                       <div className="text-sm text-muted-foreground mb-4 line-clamp-3">{topic.notes}</div>
                       <Button size="sm" className="w-full group-hover:animate-pulse-glow">
-                        Read Notes
-         
+                        {t("readNotes")}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             ) : (
               <Card className="text-center p-12">
                 <CardContent>
                   <div className="text-6xl mb-4">📚</div>
-                  <h3 className="text-xl font-semibold mb-2">No Topics Available</h3>
+                  <h3 className="text-xl font-semibold mb-2">{t("noTopicsAvailableHeading")}</h3>
                   <p className="text-muted-foreground">
-                    Topics for {subject.name} in Class {userProfile.classLevel} are coming soon!
+                    {t("noTopicsAvailableBodyPrefix")}
+                    {subject.name} in Class {userProfile.classLevel} are coming soon!
                   </p>
                 </CardContent>
               </Card>

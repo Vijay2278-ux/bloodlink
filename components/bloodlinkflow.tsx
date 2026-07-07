@@ -47,7 +47,14 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1)
     }
+  }
 
+  const isStepValid = () => {
+    if (currentStep === 1) return formData.classLevel !== ""
+    if (currentStep === 2) return formData.name.trim().length > 0
+    if (currentStep === 3) return formData.age.trim().length > 0
+    if (currentStep === 4) return formData.reason.trim().length > 0
+    return true
   }
 
   return (
